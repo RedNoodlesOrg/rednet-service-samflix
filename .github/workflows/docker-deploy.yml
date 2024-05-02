@@ -1,0 +1,12 @@
+name: Deploy with Remote Docker
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    uses: RedNoodlesOrg/rednet-actions-workflows/.github/workflows/docker-compose-deploy.yml@version-1
+    secrets: inherit

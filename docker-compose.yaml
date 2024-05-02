@@ -1,0 +1,7 @@
+name: "PLACEHOLDER"
+services:
+
+networks:
+  erebos-net:
+    name: erebos-net
+    external: true
