@@ -1,0 +1,12 @@
+services:
+  common:
+    environment:
+      PGID: 321
+      PUID: 000
+      UMASK: 002
+      TZ: Europe/Zurich
+    networks:
+      cloudflared-network: null
+    restart: unless-stopped
+    volumes:
+      - /large/data:/large/data

@@ -1,7 +1,85 @@
-name: "PLACEHOLDER"
+name: samflix2
 services:
-
+  prowlarr:
+    extends: &extends
+      file: common-service.yaml
+      service: common
+    image: lscr.io/linuxserver/prowlarr:latest
+    volumes:
+      - prowlarr_data:/config
+    environment:
+      PUID: 111
+  qbittorrent:
+    extends: *extends
+    image: lscr.io/linuxserver/qbittorrent:latest
+    environment:
+      WEBUI_PORT: 8080
+      TORRENTING_PORT: 6881
+      PUID: 222
+    volumes:
+      - qbittorrent_data:/config
+    ports:
+      - 6881:6881
+      - 6881:6881/udp
+  radarr:
+    extends: *extends
+    image: lscr.io/linuxserver/radarr:latest
+    volumes:
+      - radarr_data:/config
+    environment:
+      PUID: 333
+  readarr:
+    extends: *extends
+    image: lscr.io/linuxserver/readarr:develop
+    volumes:
+      - readarr_data:/config
+    environment:
+      PUID: 444
+  sonarr:
+    extends: *extends
+    image: lscr.io/linuxserver/sonarr:latest
+    volumes:
+      - sonarr_data:/config
+    environment:
+      PUID: 555
+  jellyfin:
+    extends: *extends
+    image: lscr.io/linuxserver/jellyfin:latest
+    environment:
+      JELLYFIN_PublishedServerUrl: $JELLYFIN_PublishedServerUrl
+      PUID: 666
+    volumes:
+      - jellyfin_data:/app/config
+      - jellyfin_cache:/cache
+  jellyseerr:
+    extends: *extends
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      LOG_LEVEL: info
+      PUID: 777
+    volumes:
+      - jellyseer_data:/app/config
+    restart: unless-stopped
 networks:
-  erebos-net:
-    name: erebos-net
+  cloudflared-network:
+    name: cloudflared-network
     external: true
+volumes:
+  prowlarr_data:
+    name: samflix2_prowlarr_data
+  qbittorrent_data:
+    name: samflix2_qbittorrent_data
+  radarr_data:
+    name: samflix2_radarr_data
+  readarr_data:
+    name: samflix2_readarr_data
+  sonarr_data:
+    name: samflix2_sonarr_data
+  jellyfin_data:
+    name: samflix2_jellyfin_data
+  jellyfin_cache:
+    name: samflix2_jellyfin_cache
+  jellyseer_data:
+    name: samflix2_jellyseer_data

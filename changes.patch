@@ -1,0 +1,28 @@
+--- /app/dist/routes/auth.js    2024-11-12 22:47:40.000000000 +0100
++++ /app/dist/routes/auth.js    2024-11-14 22:05:12.000000000 +0100
+@@ -264,7 +264,7 @@
+                 clientIp = ip.startsWith('::ffff:') ? ip.substring(7) : ip;
+             }
+         }
+-        const account = await jellyfinserver.login(body.username, body.password, clientIp);
++        const account = await jellyfinserver.login(body.username, body.password, clientIp, req);
+         // Next let's see if the user already exists
+         user = await userRepository.findOne({
+             where: { jellyfinUserId: account.User.Id },
+--- /app/dist/api/jellyfin.js   2024-11-12 22:47:40.000000000 +0100
++++ /app/dist/api/jellyfin.js   2024-11-14 22:25:20.000000000 +0100
+@@ -25,9 +25,12 @@
+             },
+         });
+     }
+-    async login(Username, Password, ClientIP) {
++    async login(Username, Password, ClientIP, req) {
+         const authenticate = async (useHeaders) => {
+-            const headers = useHeaders && ClientIP ? { 'X-Forwarded-For': ClientIP } : {};
++            let headers = {};
++           headers['cookie'] = req.headers['cookie'];
++           if (useHeaders && ClientIP) headers['X-Forwarded-For'] = ClientIP;
++           console.log(headers);
+             return this.post('/Users/AuthenticateByName', {
+                 Username,
+                 Pw: Password,
