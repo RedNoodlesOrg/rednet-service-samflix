@@ -46,7 +46,7 @@ services:
     extends: *extends
     image: lscr.io/linuxserver/jellyfin:latest
     environment:
-      JELLYFIN_PublishedServerUrl: $JELLYFIN_PublishedServerUrl
+      JELLYFIN_PublishedServerUrl: $JELLYFIN_PUBLISHEDSERVERURL
       PUID: 666
     volumes:
       - jellyfin_data:/app/config
