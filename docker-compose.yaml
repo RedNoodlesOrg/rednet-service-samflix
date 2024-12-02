@@ -49,7 +49,7 @@ services:
       JELLYFIN_PublishedServerUrl: $JELLYFIN_PUBLISHEDSERVERURL
       PUID: 666
     volumes:
-      - jellyfin_data:/app/config
+      - jellyfin_data:/config
       - jellyfin_cache:/cache
   jellyseerr:
     extends: *extends
